@@ -4,23 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>全球金融大屏</title>
+    <title>Global Finance</title>
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="/src/css/indices.css">
 </head>
+
 <body>
     <div class="container">
         <div class="header">
             <div class="header-left">
                 <div class="logo">F</div>
-                <div class="header-title">全球金融大屏</div>
+                <div class="header-title">Global Finance</div>
             </div>
             <div class="header-right">
                 <div class="live-time" id="liveTime"></div>
                 <a href="#" class="more-stocks-btn" onclick="goToMoreStocks()">
-                    📈 更多股票
+                    📈 more stocks
                 </a>
             </div>
         </div>
@@ -31,7 +32,7 @@
                 <div class="market-performance">
                     <div class="section-title">
                         <div class="section-icon">📊</div>
-                        市场表现排行
+                        Market Performance
                     </div>
                     <div class="performance-list" id="performanceList">
                     </div>
@@ -40,16 +41,17 @@
                 <div class="industry-trends">
                     <div class="section-title">
                         <div class="section-icon">🏭</div>
-                        行业趋势
+                        Industry Trends
                     </div>
                     <div class="industry-chart-container" id="industryChart"></div>
+                    <div class="industry-chart-container" id="regionTrendChart" style="height: 300px;"></div>
                 </div>
             </div>
 
             <div class="map-area">
                 <div class="section-title">
                     <div class="section-icon">🌍</div>
-                    全球指数地图
+                    Global Indices Map
                 </div>
                 <div class="map-container" id="mapContainer">
                     <img src="/public/images/worldmap.png" alt="全球地图" class="map-background">
@@ -57,39 +59,19 @@
             </div>
 
             <div class="right-panel">
-                <div class="news" style="height: 534px;">
+                <div class="news" style="height: 700px;">
                     <div class="section-title">
                         <div class="section-icon">📈</div>
-                        近期新闻
+                        Recent News
                     </div>
-                    <div class="chart-container" id="trendChart"></div>
-                </div>
-            </div>
-
-            <div class="stats-section">
-                <div class="stat-card">
-                    <div class="stat-value" id="totalMarketCap">$45.2T</div>
-                    <div class="stat-label">全球市值</div>
-                    <div class="stat-change positive">+2.3%</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="tradingVolume">$2.8T</div>
-                    <div class="stat-label">交易量</div>
-                    <div class="stat-change positive">+5.7%</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="volatilityIndex">18.5</div>
-                    <div class="stat-label">波动率指数</div>
-                    <div class="stat-change negative">-1.2%</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="activeMarkets">156</div>
-                    <div class="stat-label">活跃市场</div>
-                    <div class="stat-change positive">+3</div>
+                    <div class="news-list" id="newsList">
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <script src="/src/js/indices.js"></script>
+    </div>
+    <script type="module" src="/src/js/test.js"></script>
 </body>
+
 </html>
