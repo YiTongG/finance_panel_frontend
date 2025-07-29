@@ -1,0 +1,809 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #333;
+    height: 100vh;
+    overflow: hidden;
+    /* 防止整体滚动条 */
+}
+
+.container {
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 280px 1fr 280px;
+    grid-template-rows: 45px 1fr;
+    /* Header + Main Content Area */
+    gap: 12px;
+    padding: 12px;
+}
+
+/* 顶部标题栏 */
+.header {
+    grid-column: 1 / -1;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 16px;
+    /* Increased radius for consistency */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 6px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* Changed from red to subtle blue/purple gradient */
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.05) 100%);
+    pointer-events: none;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    z-index: 1;
+}
+
+.logo {
+    width: 28px;
+    height: 28px;
+    /* Changed from red to main theme gradient */
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: white;
+    font-weight: bold;
+    /* Changed shadow color */
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.header-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    /* Changed from red to main theme gradient */
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    z-index: 1;
+}
+
+.live-time {
+    font-size: 0.8rem;
+    /* Changed from red to accent blue */
+    color: #3B82F6;
+    font-weight: 600;
+    font-family: 'Courier New', monospace;
+    padding: 3px 8px;
+    /* Changed from red to accent blue tint */
+    background: rgba(59, 130, 246, 0.1);
+    border-radius: 4px;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.more-stocks-btn {
+    padding: 4px 10px;
+    /* Changed from red to main theme gradient */
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    /* Changed shadow color */
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.more-stocks-btn:hover {
+    transform: translateY(-2px);
+    /* Changed shadow color */
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+/* 主内容区域 - 调整为3列，2行（顶部内容区 + 底部统计卡片区） */
+.main-content {
+    grid-column: 1 / -1;
+    /* Spans all columns of the parent container */
+    display: grid;
+    grid-template-columns: 280px 1fr 280px;
+    /* Left, Middle, Right columns */
+    grid-template-rows: 1fr min-content;
+    /* Top content area (1fr) and bottom stats area (min-content) */
+    gap: 12px;
+    overflow: hidden;
+    /* 防止 main-content 内部出现多余滚动条 */
+}
+
+/* 左侧面板容器，用于市场表现排行和行业趋势 */
+.left-panel {
+    grid-column: 1;
+    /* Occupies the first column */
+    grid-row: 1 / -1;
+    /* Spans both rows of main-content (top content + bottom stats) */
+    display: grid;
+    /* Nested grid for its children */
+    grid-template-rows: 1fr 1fr;
+    /* Market Performance and Industry Trends share height equally */
+    gap: 12px;
+    /* Gap between market-performance and industry-trends */
+    overflow: hidden;
+    /* 防止内部滚动条 */
+}
+
+/* 市场表现排行 (Dark Card Style) */
+.market-performance {
+    background: rgba(30, 41, 59, 0.6);
+    /* Consistent dark background */
+    backdrop-filter: blur(10px);
+    /* Consistent blur */
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border: 1px solid #334155;
+    /* Consistent dark border */
+    padding: 16px;
+    color: #f1f5f9;
+    /* Light text */
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.market-performance::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    /* Changed to accent blue gradient */
+    background: linear-gradient(90deg, #3B82F6, #667eea);
+}
+
+/* 中央地图区域 (Light Card Style) */
+.map-area {
+    grid-column: 2;
+    /* Middle column */
+    grid-row: 1;
+    /* Occupies the top content row */
+    background: transparent;
+    /* Consistent light background */
+    backdrop-filter: blur(20px);
+    /* Consistent blur */
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    /* Consistent light shadow */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    /* Consistent light border */
+    padding: 16px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.map-area::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    /* Changed to main theme gradient */
+    background: linear-gradient(90deg, #667eea, #764ba2);
+}
+
+.map-area .section-title {
+    color: #333;
+    /* Dark text for light background */
+}
+
+.map-container {
+    flex: 1;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.0);
+    /* Lighter tint for map background */
+    border-radius: 12px;
+    margin-top: 10px;
+    min-height: 150px;
+    overflow: hidden;
+}
+
+.map-background {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0.9;
+    filter: brightness(1.2) contrast(1.1);
+}
+
+/* 右侧面板容器，用于趋势分析和风险监控 */
+.right-panel {
+    grid-column: 3;
+    /* Occupies the third column */
+    grid-row: 1;
+    /* Occupies the top content row */
+    display: grid;
+    /* Nested grid for its children */
+    grid-template-rows: 1fr 1fr;
+    /* Trend Analysis and Risk Monitoring share height equally */
+    overflow: hidden;
+    /* 防止内部滚动条 */
+}
+
+/* 趋势分析 (Dark Card Style) */
+.news {
+    background: rgba(30, 41, 59, 0.6);
+    /* Consistent dark background */
+    backdrop-filter: blur(10px);
+    /* Consistent blur */
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border: 1px solid #334155;
+    /* Consistent dark border */
+    padding: 16px;
+    color: #f1f5f9;
+    /* Light text */
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.news::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    /* Changed to accent blue gradient */
+    background: linear-gradient(90deg, #3B82F6, #667eea);
+}
+
+/* 行业趋势 (Dark Card Style) */
+.industry-trends {
+    background: rgba(30, 41, 59, 0.6);
+    /* Consistent dark background */
+    backdrop-filter: blur(10px);
+    /* Consistent blur */
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border: 1px solid #334155;
+    /* Consistent dark border */
+    padding: 16px;
+    color: #f1f5f9;
+    /* Light text */
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.industry-trends::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    /* Changed to accent blue gradient */
+    background: linear-gradient(90deg, #3B82F6, #667eea);
+}
+
+/* 右侧统计卡片区域 */
+.stats-section {
+    grid-column: 2 / -1;
+    /* Spans middle and right columns */
+    grid-row: 2;
+    /* Occupies the bottom stats row */
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    /* 4 columns for the cards */
+    gap: 20px;
+    /* Increased gap for consistency */
+    overflow: hidden;
+    align-items: center;
+}
+
+.section-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.section-icon {
+    width: 20px;
+    height: 20px;
+    /* Changed to main theme gradient */
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: white;
+}
+
+.performance-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.performance-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 10px;
+    background: rgba(51, 65, 85, 0.4);
+    /* Consistent dark item background */
+    border-radius: 8px;
+    /* Slightly larger radius */
+    border: 1px solid transparent;
+    /* Consistent transparent border */
+    transition: all 0.3s ease;
+    font-size: 0.8rem;
+}
+
+.performance-item:hover {
+    background: rgba(51, 65, 85, 0.7);
+    /* Darker on hover */
+    border-color: #475569;
+    /* Border color on hover */
+    transform: translateX(5px);
+    /* Consistent hover effect */
+}
+
+.performance-name {
+    font-weight: 600;
+    color: #f1f5f9;
+}
+
+.performance-change {
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.performance-change.positive {
+    color: #10b981;
+}
+
+.performance-change.negative {
+    color: #ef4444;
+}
+
+/* 图表容器 */
+.chart-container {
+    width: 100%;
+    flex: 1;
+    min-height: 120px;
+    display: flex;
+}
+
+/* 行业趋势图表容器 */
+.industry-chart-container {
+    width: 100%;
+    flex: 1;
+    min-height: 70px;
+    display: flex;
+}
+
+/* 统计卡片 (Dark Card Style) */
+.stat-card {
+    background: rgba(30, 41, 59, 0.6);
+    /* Consistent dark background */
+    backdrop-filter: blur(10px);
+    /* Consistent blur */
+    border-radius: 16px;
+    /* Consistent radius */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    /* Consistent shadow */
+    border: 1px solid #334155;
+    /* Consistent dark border */
+    padding: 16px;
+    /* Increased padding */
+    text-align: center;
+    color: #f1f5f9;
+    /* Light text */
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 40px;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    /* Consistent hover effect */
+    background: rgba(30, 41, 59, 0.8);
+    /* Darker on hover */
+    box-shadow: 0 12px 32px rgba(102, 126, 234, 0.16);
+    /* Enhanced shadow on hover */
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    /* Increased height for consistency */
+    /* Changed to accent blue gradient */
+    background: linear-gradient(90deg, #3B82F6, #667eea);
+}
+
+.stat-value {
+    font-size: 1.8rem;
+    /* Slightly larger font */
+    font-weight: 800;
+    margin-bottom: 3px;
+    /* Changed to accent blue gradient */
+    background: linear-gradient(135deg, #3B82F6, #667eea);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    /* Slightly larger font */
+    color: #94A3B8;
+    /* Consistent light gray */
+    font-weight: 500;
+    margin-bottom: 2px;
+}
+
+.stat-change {
+    font-size: 0.75rem;
+    /* Slightly larger font */
+    font-weight: 600;
+}
+
+.stat-change.positive {
+    color: #10b981;
+}
+
+.stat-change.negative {
+    color: #ef4444;
+}
+
+/* 指数点位样式 */
+.index-point-wrapper {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    /* Wrapper's top/left is the dot's center */
+    cursor: pointer;
+    z-index: 10;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.index-dot {
+    position: relative;
+    /* For z-index over lines */
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Dot's center is at (0,0) within the wrapper's transformed coordinate system */
+    z-index: 25;
+    /* Ensure dot is on top */
+}
+
+.index-dot.positive {
+    background: linear-gradient(135deg, #10b981, #059669);
+    animation: pulse-positive 2s infinite;
+}
+
+.index-dot.negative {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    animation: pulse-negative 2s infinite;
+}
+
+@keyframes pulse-positive {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(16, 185, 129, 0.3);
+    }
+
+    50% {
+        box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2), 0 4px 12px rgba(16, 185, 129, 0.4);
+    }
+}
+
+@keyframes pulse-negative {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(239, 68, 68, 0.3);
+    }
+
+    50% {
+        box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.2), 0 4px 12px rgba(239, 68, 68, 0.4);
+    }
+}
+
+.index-point-wrapper:hover .index-dot {
+    transform: scale(1.3);
+    border-width: 3px;
+}
+
+/* 信息卡片 */
+.index-info-card {
+    position: absolute;
+    /* top and left will be set by JS dynamically */
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: 6px;
+    padding: 6px 10px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    white-space: nowrap;
+    font-size: 0.75rem;
+    opacity: 1;
+    /* Always visible */
+    visibility: visible;
+    /* Always visible */
+    transform: none;
+    /* No initial transform or hover transform */
+    transition: none;
+    /* No transition for card position, only for opacity when loading */
+    z-index: 20;
+    /* Below dot, above lines */
+    pointer-events: none;
+    /* 卡片不响应鼠标事件，防止遮挡地图 */
+    min-width: 90px;
+}
+
+/* 隐藏之前的hover显隐效果，改为常显 */
+.index-point-wrapper:hover .index-info-card {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+}
+
+.index-info-card-name {
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 2px;
+    font-size: 0.8rem;
+}
+
+.index-info-card-change {
+    font-weight: 800;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.index-info-card-change.positive {
+    color: #059669;
+}
+
+.index-info-card-change.negative {
+    color: #dc2626;
+}
+
+.index-info-card-change::before {
+    content: '';
+    width: 0;
+    height: 0;
+    border-style: solid;
+}
+
+.index-info-card-change.positive::before {
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+    border-bottom: 4px solid #059669;
+}
+
+.index-info-card-change.negative::before {
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+    border-top: 4px solid #dc2626;
+}
+
+/* 连接线样式 */
+.connection-line {
+    position: absolute;
+    background-color: rgba(148, 163, 184, 0.5);
+    /* 柔和的灰色线 */
+    z-index: 15;
+    /* 在圆点和卡片之间 */
+    transition: all 0.3s ease-out;
+    /* 让线段出现时有动画效果 */
+}
+
+.line-h {
+    height: 1px;
+}
+
+.line-v {
+    width: 1px;
+}
+
+/* 滚动条美化 */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #5a67d8, #6b46c1);
+}
+
+/* 响应式设计 */
+@media (max-width: 1400px) {
+    .container {
+        grid-template-columns: 260px 1fr 260px;
+    }
+}
+
+@media (max-width: 1200px) {
+    .container {
+        grid-template-columns: 240px 1fr 240px;
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .header {
+        padding: 6px 16px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .container {
+        grid-template-columns: 1fr;
+        grid-template-rows: 45px 1.5fr 1.5fr 2fr 2fr min-content;
+        gap: 12px;
+        overflow-y: auto;
+    }
+
+    .main-content {
+        grid-column: 1;
+        display: contents;
+    }
+
+    .left-panel {
+        grid-column: 1;
+        grid-row: 2 / span 2;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .right-panel {
+        grid-column: 1;
+        grid-row: 5;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .map-area {
+        grid-column: 1;
+        grid-row: 4;
+    }
+
+    .market-performance,
+    .industry-trends,
+    .news,
+    .risk-monitoring {
+        flex: 1;
+        min-height: unset;
+    }
+
+    .stats-section {
+        grid-column: 1;
+        grid-row: 6;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .header-title {
+        font-size: 1rem;
+    }
+
+    .stats-section {
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(4, auto);
+    }
+
+    .stat-card {
+        padding: 8px;
+    }
+
+    .container {
+        grid-template-rows: 45px repeat(5, 1fr) min-content;
+    }
+
+    .left-panel {
+        grid-row: 2;
+    }
+
+    .industry-trends {
+        grid-row: auto;
+    }
+
+    .map-area {
+        grid-row: 3;
+    }
+
+    .right-panel {
+        grid-row: 4;
+    }
+
+    .news,
+    .risk-monitoring {
+        flex: 1;
+    }
+
+    .stats-section {
+        grid-row: 6;
+    }
+}
