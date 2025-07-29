@@ -266,7 +266,80 @@ body {
     overflow: hidden;
     /* 防止内部滚动条 */
 }
+.news-list {
+    height: calc(100% - 60px); /* Adjust based on section-title height and padding */
+    overflow-y: auto; /* Enable vertical scrolling */
+    padding: 10px 15px; /* Padding inside the scrollable area */
+    box-sizing: border-box; /* Include padding in height calculation */
+    scrollbar-width: thin; /* For Firefox */
+    scrollbar-color: #888 #555; /* For Firefox */
+}
 
+/* Webkit scrollbar (Chrome, Safari) */
+.news-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.news-list::-webkit-scrollbar-track {
+    background: #555;
+    border-radius: 3px;
+}
+
+.news-list::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+.news-item {
+    background-color: #3a3f62; /* Background for each news item */
+    padding: 12px;
+    margin-bottom: 10px; /* Space between news items */
+    border-radius: 8px;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.news-item:hover {
+    background-color: #4a507a; /* Slightly lighter on hover */
+    cursor: pointer;
+}
+
+.news-title {
+    color: #e0e0e0; /* Light gray for titles */
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.4;
+    margin-bottom: 5px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Limit to 3 lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.news-link {
+    color: #88aaff; /* A blueish color for links */
+    font-size: 13px;
+    text-decoration: none; /* No underline */
+    display: block; /* Ensures link takes full width */
+}
+
+.news-link:hover {
+    text-decoration: underline;
+}
+
+/* Basic styling for the news section itself, if not already present */
+.news {
+    background-color: #2a2e48; /* Darker background for the whole section */
+    border-radius: 12px;
+    padding: 15px; /* Overall padding for the news component */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column; /* To stack title and news list */
+}
+
+.news .section-title {
+    margin-bottom: 15px; /* Space between title and news list */
+}
 /* 趋势分析 (Dark Card Style) */
 .news {
     background: rgba(30, 41, 59, 0.6);
@@ -325,21 +398,6 @@ body {
     height: 3px;
     /* Changed to accent blue gradient */
     background: linear-gradient(90deg, #3B82F6, #667eea);
-}
-
-/* 右侧统计卡片区域 */
-.stats-section {
-    grid-column: 2 / -1;
-    /* Spans middle and right columns */
-    grid-row: 2;
-    /* Occupies the bottom stats row */
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    /* 4 columns for the cards */
-    gap: 20px;
-    /* Increased gap for consistency */
-    overflow: hidden;
-    align-items: center;
 }
 
 .section-title {
@@ -434,87 +492,6 @@ body {
     display: flex;
 }
 
-/* 统计卡片 (Dark Card Style) */
-.stat-card {
-    background: rgba(30, 41, 59, 0.6);
-    /* Consistent dark background */
-    backdrop-filter: blur(10px);
-    /* Consistent blur */
-    border-radius: 16px;
-    /* Consistent radius */
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    /* Consistent shadow */
-    border: 1px solid #334155;
-    /* Consistent dark border */
-    padding: 16px;
-    /* Increased padding */
-    text-align: center;
-    color: #f1f5f9;
-    /* Light text */
-    position: relative;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    min-height: 40px;
-}
-
-.stat-card:hover {
-    transform: translateY(-5px);
-    /* Consistent hover effect */
-    background: rgba(30, 41, 59, 0.8);
-    /* Darker on hover */
-    box-shadow: 0 12px 32px rgba(102, 126, 234, 0.16);
-    /* Enhanced shadow on hover */
-}
-
-.stat-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    /* Increased height for consistency */
-    /* Changed to accent blue gradient */
-    background: linear-gradient(90deg, #3B82F6, #667eea);
-}
-
-.stat-value {
-    font-size: 1.8rem;
-    /* Slightly larger font */
-    font-weight: 800;
-    margin-bottom: 3px;
-    /* Changed to accent blue gradient */
-    background: linear-gradient(135deg, #3B82F6, #667eea);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.stat-label {
-    font-size: 0.85rem;
-    /* Slightly larger font */
-    color: #94A3B8;
-    /* Consistent light gray */
-    font-weight: 500;
-    margin-bottom: 2px;
-}
-
-.stat-change {
-    font-size: 0.75rem;
-    /* Slightly larger font */
-    font-weight: 600;
-}
-
-.stat-change.positive {
-    color: #10b981;
-}
-
-.stat-change.negative {
-    color: #ef4444;
-}
 
 /* 指数点位样式 */
 .index-point-wrapper {
