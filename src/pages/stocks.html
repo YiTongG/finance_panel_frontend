@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>股票概览 - 搜索与市场</title>
+    <link rel="stylesheet" href="/src/css/stocks.css">
+</head>
+
+<body>
+    <div class="main-container">
+        <div class="search-section fade-in-up delay-2">
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="搜索股票代码或公司名称..." id="searchInput">
+                <div class="search-icon">🔍</div>
+                <div class="search-suggestions" id="searchSuggestions"></div>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <div class="hot-stocks-section fade-in-up delay-3">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <div class="title-icon"></div>
+                        热门股票
+                    </h2>
+                    <div class="tab-buttons">
+                        <button class="tab-btn active" data-tab="volume">成交量TOP</button>
+                        <button class="tab-btn" data-tab="amplitude">振幅TOP</button>
+                        <button class="tab-btn" data-tab="change">涨幅TOP</button>
+                    </div>
+                </div>
+                <div class="stocks-list" id="stocksList">
+                </div>
+            </div>
+
+            <div class="sectors-section fade-in-up delay-4">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <div class="title-icon"></div>
+                        行业板块
+                    </h2>
+                </div>
+                <div class="sectors-grid" id="sectorsGrid">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/src/js/stocks.js"></script>
+
+</body>
+
+</html>
