@@ -1,22 +1,14 @@
-
-// import { StockAPI } from './api-config.js';
+import { API,StockAPI } from '/src/config/api-config.js';
 
 // Current active tab for hot stocks
 let currentTab = 'volume';
 
-// Initialize page
-document.addEventListener('DOMContentLoaded', function () {
-    fetchAndRenderHotStocks();
-    fetchAndRenderSectors();
-    setupTabSwitching();
-    setupSearch();
-});
-
-//
+// return to index page
 function backToIndex() {
     console.log("Navigating to index page...");
     window.location.href = "indices.html";
 }
+
 // Render stock items (for hot stocks)
 function renderStocksList(stocks) {
     const stocksList = document.getElementById('stocksList');
@@ -27,8 +19,10 @@ function renderStocksList(stocks) {
                 <div class="stock-name">${stock.name}</div>
             </div>
             <div class="stock-price">$${stock.price}</div>
+            <div class="stock-volume">${stock.volume}</div>   
+            <div class="stock-amplitude">${stock.amplitude}</div>
             <div class="stock-change ${stock.change.includes('+') ? 'positive' : 'negative'}">${stock.change}</div>
-            <div class="stock-volume">${stock.volume}</div>
+            
         </div>
     `).join('');
 }
@@ -41,38 +35,7 @@ async function fetchAndRenderHotStocks() {
     } catch (error) {
         console.error('Failed to fetch hot stocks:', error);
         // Fallback or error display
-        document.getElementById('stocksList').innerHTML = '<p style="color: #94A3B8;">加载热门股票失败，请稍后再试。</p>';
-    }
-}
-
-// Fetch and render industry sectors
-async function fetchAndRenderSectors() {
-    try {
-        const sectors = await StockAPI.getSectors();
-        const sectorsGrid = document.getElementById('sectorsGrid');
-        sectorsGrid.innerHTML = sectors.map(sector => {
-            const isPositive = parseFloat(sector.change) > 0;
-            return `
-          <div class="sector-card ${isPositive ? 'positive' : 'negative'}">
-            <div class="sector-name">${sector.name}</div>
-            <div class="sector-change ${isPositive ? 'positive' : 'negative'}">${sector.change}</div>
-            <div class="sector-leaders">龙头：等待数据</div>
-          </div>
-        `;
-        }).join('');
-        // Re-attach ripple effect listeners to newly rendered elements
-        document.querySelectorAll('.sector-card').forEach(el => {
-            el.addEventListener('click', addRippleEffect);
-            el.addEventListener('mouseenter', function () {
-                this.style.transform = 'translateY(-5px) scale(1.02)';
-            });
-            el.addEventListener('mouseleave', function () {
-                this.style.transform = '';
-            });
-        });
-    } catch (error) {
-        console.error('Failed to fetch sectors:', error);
-        document.getElementById('sectorsGrid').innerHTML = '<p style="color: #94A3B8;">加载行业板块失败，请稍后再试。</p>';
+        document.getElementById('stocksList').innerHTML = '<p style="color: #94A3B8;">Failed to load hot stocks, please try again later.</p>';
     }
 }
 
@@ -97,6 +60,7 @@ function setupSearch() {
 
     searchInput.addEventListener('input', async function () {
         const query = this.value.toLowerCase().trim();
+        console.log('Search query:', query);
 
         if (query.length === 0) {
             searchSuggestions.style.display = 'none';
@@ -117,7 +81,7 @@ function setupSearch() {
                 searchSuggestions.style.display = 'none';
             }
         } catch (error) {
-            console.error('搜索股票失败:', error);
+            console.error('Search failed:', error);
             searchSuggestions.style.display = 'none';
         }
     });
@@ -128,7 +92,7 @@ function setupSearch() {
             const symbol = suggestionItem.dataset.symbol;
             searchInput.value = symbol;
             searchSuggestions.style.display = 'none';
-            console.log('选择股票:', symbol);
+            console.log('Selected stock:', symbol);
             // Here you might want to redirect to a detail page or display stock info
         }
     });
@@ -153,7 +117,11 @@ function addRippleEffect(e) {
     ripple.addEventListener('animationend', () => ripple.remove());
 }
 
+// Initialize page
 document.addEventListener('DOMContentLoaded', function () {
+    fetchAndRenderHotStocks();
+    setupTabSwitching();
+    setupSearch();
     // Attach ripple effect to stock items and sector cards
     document.querySelectorAll('.stock-item, .sector-card').forEach(el => {
         el.addEventListener('click', addRippleEffect);
@@ -164,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
         el.style.opacity = '';
         el.style.transform = '';
     });
-
+    // Back button functionality
     const backButton = document.getElementById('backButton');
     if (backButton) {
         backButton.addEventListener('click', backToIndex);
