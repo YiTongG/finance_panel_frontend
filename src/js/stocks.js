@@ -1,5 +1,5 @@
 
-import { StockAPI } from './api-config.js';
+// import { StockAPI } from './api-config.js';
 
 // Current active tab for hot stocks
 let currentTab = 'volume';
@@ -12,6 +12,11 @@ document.addEventListener('DOMContentLoaded', function () {
     setupSearch();
 });
 
+//
+function backToIndex() {
+    console.log("Navigating to index page...");
+    window.location.href = "indices.html";
+}
 // Render stock items (for hot stocks)
 function renderStocksList(stocks) {
     const stocksList = document.getElementById('stocksList');
@@ -159,4 +164,9 @@ document.addEventListener('DOMContentLoaded', function () {
         el.style.opacity = '';
         el.style.transform = '';
     });
+
+    const backButton = document.getElementById('backButton');
+    if (backButton) {
+        backButton.addEventListener('click', backToIndex);
+    }
 });
