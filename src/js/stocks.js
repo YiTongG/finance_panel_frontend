@@ -1,4 +1,4 @@
-import { API,StockAPI } from '/src/config/api-config.js';
+import { API, StockAPI } from '/src/config/api-config.js';
 
 // Current active tab for hot stocks
 let currentTab = 'volume';
@@ -53,56 +53,6 @@ function setupTabSwitching() {
     });
 }
 
-// Set up search functionality
-function setupSearch() {
-    const searchInput = document.getElementById('searchInput');
-    const searchSuggestions = document.getElementById('searchSuggestions');
-
-    searchInput.addEventListener('input', async function () {
-        const query = this.value.toLowerCase().trim();
-        console.log('Search query:', query);
-
-        if (query.length === 0) {
-            searchSuggestions.style.display = 'none';
-            return;
-        }
-
-        try {
-            const searchResults = await StockAPI.searchStocks(query);
-            if (searchResults.length > 0) {
-                searchSuggestions.innerHTML = searchResults.map(item => `
-                <div class="suggestion-item" data-symbol="${item.ticker}">
-                    <span class="suggestion-symbol">${item.ticker}</span>
-                    <span class="suggestion-name">${item.name}</span>
-                </div>
-            `).join('');
-                searchSuggestions.style.display = 'block';
-            } else {
-                searchSuggestions.style.display = 'none';
-            }
-        } catch (error) {
-            console.error('Search failed:', error);
-            searchSuggestions.style.display = 'none';
-        }
-    });
-
-    searchSuggestions.addEventListener('click', function (e) {
-        const suggestionItem = e.target.closest('.suggestion-item');
-        if (suggestionItem) {
-            const symbol = suggestionItem.dataset.symbol;
-            searchInput.value = symbol;
-            searchSuggestions.style.display = 'none';
-            console.log('Selected stock:', symbol);
-            // Here you might want to redirect to a detail page or display stock info
-        }
-    });
-
-    document.addEventListener('click', function (e) {
-        if (!searchInput.contains(e.target) && !searchSuggestions.contains(e.target)) {
-            searchSuggestions.style.display = 'none';
-        }
-    });
-}
 
 // Ripple animation effect
 function addRippleEffect(e) {
@@ -121,7 +71,7 @@ function addRippleEffect(e) {
 document.addEventListener('DOMContentLoaded', function () {
     fetchAndRenderHotStocks();
     setupTabSwitching();
-    setupSearch();
+    // setupSearch();
     // Attach ripple effect to stock items and sector cards
     document.querySelectorAll('.stock-item, .sector-card').forEach(el => {
         el.addEventListener('click', addRippleEffect);
@@ -137,4 +87,45 @@ document.addEventListener('DOMContentLoaded', function () {
     if (backButton) {
         backButton.addEventListener('click', backToIndex);
     }
+    // Perform search action
+
+
+    const searchInput = document.getElementById('searchInput');
+    const searchButton = document.getElementById('searchButton');
+
+    async function performSearch() {
+        const query = searchInput.value.trim();
+        console.log('Search query:', query);
+
+        if (!query) {
+            alert('Search query cannot be empty. Please enter a stock name.');
+            searchInput.value = ''; // Clear the search input
+            return; // Exit the function
+        }
+        try {
+            const response = await StockAPI.searchStocks(query);
+            console.log('API response:', response);
+            if (response && response.success === true && response.count === 0 && response.data && response.data.length === 0) {
+                alert('The entered stock name is incorrect or no results were found. Please try again.');
+                searchInput.value = ''; // Clear the search input
+                return; // Exit the function
+            }
+            console.log('Stock data:', response.data);
+        } catch (error) {
+            console.error('Error during stock search:', error);
+            alert('An error occurred while searching for stocks. Please try again later.');
+        }
+    }
+
+    // Attach the event listener to the search button
+    searchButton.addEventListener('click', performSearch);
+
+    // Optional: Allow searching on Enter key press
+    searchInput.addEventListener('keypress', function (event) {
+        if (event.key === 'Enter') {
+            performSearch();
+        }
+    });
+
 });
+

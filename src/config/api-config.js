@@ -101,7 +101,7 @@ const StockAPI = {
         if (!query) {
             throw new Error('Search keyword cannot be empty');
         }
-        return API.get('/api/stocks/search', { q: query });
+        return API.get('/api/stocks/search', { query: query });
     }
 };
 
