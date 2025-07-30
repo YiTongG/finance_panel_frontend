@@ -5,7 +5,7 @@
 }
 
 body {
-    font-family: 'Inter', -apple-system, BlinkMacMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: #333;
     min-height: 100vh;
@@ -138,7 +138,40 @@ body {
     max-width: 1400px;
     margin: 0 auto;
     padding: 30px 20px;
+    position: relative; /* 确保子元素的绝对定位生效 */
 }
+
+/* 新增的返回按钮样式 */
+.back-button {
+    position: absolute;
+    top: 36px; /* 沿着搜索框上边缘往左 */
+    left: 20px; /* 沿着热门股票左边缘往上 */
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid #475569;
+    color: #E2E8F0;
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 10;
+}
+
+.back-button:hover {
+    background: rgba(30, 41, 59, 0.8);
+    border-color: #3B82F6;
+    transform: scale(1.1);
+}
+
+.back-button svg {
+    width: 24px;
+    height: 24px;
+}
+
 
 /* 搜索栏 */
 .search-section {

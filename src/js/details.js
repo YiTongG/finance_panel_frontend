@@ -1,12 +1,14 @@
 
 // 返回上一页功能
 function goBack() {
-    if (window.history.length > 1) {
-        window.history.back();
-    } else {
-        // 如果没有历史记录，可以跳转到默认页面
-        window.location.href = '/';
-    }
+    // if (window.history.length > 1) {
+    //     window.history.back();
+    // } else {
+    //     // 如果没有历史记录，可以跳转到默认页面
+    //     window.location.href = '/';
+    // }
+    console.log("Navigating to more stocks page...");
+    window.location.href = "stocks.html";
 }
 
 class StockDashboard {

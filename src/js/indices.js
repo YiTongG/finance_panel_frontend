@@ -1,4 +1,4 @@
-import { API,IndicesAPI } from '/src/config/api-config.js'; 
+import { API, IndicesAPI } from '/src/config/api-config.js';
 // Function to initialize and render the Region Trend Pie Chart
 async function initRegionTrendChart() {
     const chartDom = document.getElementById('regionTrendChart');
@@ -21,7 +21,7 @@ async function initRegionTrendChart() {
             value: item.count  // Use 'count' as the value
         }));
 
-const option = {
+        const option = {
             tooltip: {
                 trigger: 'item',
                 // Adjust the formatter to show percentage or count as desired.
@@ -74,6 +74,7 @@ const option = {
         console.error("Failed to fetch or render region trend data:", error);
     }
 }
+
 async function initMarketPerformance() {
     const performanceListDom = document.getElementById('performanceList');
     if (!performanceListDom) {
@@ -178,10 +179,18 @@ async function initNewsRecommendation() {
     // Start the first attempt
     fetchNewsWithRetry(MAX_RETRIES, INITIAL_DELAY_MS);
 }
+function goToMoreStocks() {
+    console.log("Navigating to more stocks page...");
+    window.location.href = "stocks.html";
+}
 // Call the function when the DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
+    const moreStocksBtn = document.getElementById('moreStocksBtn');
+    if (moreStocksBtn) {
+        moreStocksBtn.addEventListener('click', goToMoreStocks);
+    }
     // Other initializations...
-    initRegionTrendChart();
-    initMarketPerformance();
-    initNewsRecommendation();
+    //initRegionTrendChart();
+    //initMarketPerformance();
+    //initNewsRecommendation();
 });
