@@ -12,6 +12,7 @@ const API = {
             Object.keys(params).forEach(key =>
                 url.searchParams.append(key, params[key])
             );
+            url.searchParams.append('_', new Date().getTime());
 
             const response = await fetch(url);
             if (!response.ok) {
@@ -102,6 +103,17 @@ const StockAPI = {
             throw new Error('Search keyword cannot be empty');
         }
         return API.get('/api/stocks/search', { query: query });
+    },
+
+    // Searches for a single stock's historical data.
+    searchStocksHistory(symbol, interval) {
+        if (!symbol || symbol.trim() === '') {
+            throw new Error('Stock symbol cannot be empty.');
+        }
+        if (!interval || interval.trim() === '') {
+            throw new Error('Time interval cannot be empty.');
+        }
+        return API.get('/api/stocks/history',  { symbol: symbol, interval: interval });
     }
 };
 

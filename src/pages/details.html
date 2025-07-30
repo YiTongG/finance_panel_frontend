@@ -1,13 +1,11 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>股票交易面板</title>
-    <!-- ECharts -->
+    <title>Stock Details</title>
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/src/css/details.css">
 </head>
@@ -15,7 +13,6 @@
 <body>
     <div class="container">
         <div class="main-card">
-            <!-- 顶部价格信息 -->
             <div class="price-header">
                 <div class="price-content">
                     <div class="price-info">
@@ -29,104 +26,105 @@
                                     <div id="changePercent">(+0.00%)</div>
                                 </div>
                             </div>
-                            <div class="price-subtitle" id="priceSubtitle">实时股价 • 美国东部时间</div>
+                            <div class="price-subtitle" id="priceSubtitle">Real-time Price • Eastern Time</div>
                         </div>
                     </div>
-                    <button class="back-button" onclick="goBack()" title="返回上一页">
+                    <button class="back-button" onclick="goBack()" title="Go Back">
                         ←
                     </button>
                 </div>
             </div>
 
-            <!-- 图表控制区域 -->
             <div class="chart-controls">
                 <div class="time-range-buttons">
-                    <button class="time-btn active" data-period="1D">1D</button>
-                    <button class="time-btn" data-period="5D">5D</button>
-                    <button class="time-btn" data-period="1M">1M</button>
-                    <button class="time-btn" data-period="6M">6M</button>
-                    <button class="time-btn" data-period="YTD">年初至今</button>
-                    <button class="time-btn" data-period="1Y">1年</button>
-                    <button class="time-btn" data-period="5Y">5年</button>
-                    <button class="time-btn" data-period="ALL">全部</button>
+                    <button class="time-btn active" data-period="1m">1M</button>
+                    <button class="time-btn" data-period="2m">2M</button>
+                    <button class="time-btn" data-period="3m">3M</button>
+                    <button class="time-btn" data-period="4m">4M</button>
+                    <button class="time-btn" data-period="5m">5M</button>
+                    <button class="time-btn" data-period="15m">15M</button>
+                    <button class="time-btn" data-period="30m">30M</button>
+                    <button class="time-btn" data-period="1h">1H</button>
+                    <button class="time-btn" data-period="1d">1D</button>
+                    <button class="time-btn" data-period="1wk">1WK</button>
+                    <button class="time-btn" data-period="1mo">1MO</button>
+                    <button class="time-btn" data-period="1qty">1QTY</button>
                 </div>
             </div>
 
-            <!-- 图表容器 -->
             <div class="chart-container" id="stockChart"></div>
 
-            <!-- 底部数据表格 -->
             <div class="data-table">
                 <div class="table-section">
                     <div class="table-title">
-                        📈 详细数据分析
+                        📈 Detailed Data Analysis
                     </div>
                     <div class="table-grid">
                         <div class="data-card">
                             <div class="data-item">
-                                <span class="data-label" id="startLabel">起始价格</span>
+                                <span class="data-label" id="startLabel">Start Price</span>
                                 <span class="data-value" id="startPrice">0.00</span>
                             </div>
                             <div class="data-item">
-                                <span class="data-label">当前价格</span>
+                                <span class="data-label">Current Price</span>
                                 <span class="data-value highlight" id="chartEndPrice">0.00</span>
                             </div>
                             <div class="data-item">
-                                <span class="data-label">价格变化</span>
+                                <span class="data-label">Price Change</span>
                                 <span class="data-value" id="priceChangeValue">0.00</span>
                             </div>
                         </div>
 
                         <div class="data-card">
                             <div class="data-item">
-                                <span class="data-label">最高价格</span>
+                                <span class="data-label">High Price</span>
                                 <span class="data-value" id="highPrice">0.00</span>
                             </div>
                             <div class="data-item">
-                                <span class="data-label">最低价格</span>
+                                <span class="data-label">Low Price</span>
                                 <span class="data-value" id="lowPrice">0.00</span>
                             </div>
                             <div class="data-item">
-                                <span class="data-label" id="rangeLabel">价格范围</span>
+                                <span class="data-label" id="rangeLabel">Price Range</span>
                                 <span class="data-value" id="priceRange">0.00 - 0.00</span>
                             </div>
                         </div>
 
                         <div class="data-card">
                             <div class="data-item">
-                                <span class="data-label">平均价格</span>
+                                <span class="data-label">Average Price</span>
                                 <span class="data-value" id="avgPrice">0.00</span>
                             </div>
                             <div class="data-item">
-                                <span class="data-label">价格波动率</span>
+                                <span class="data-label">Volatility</span>
                                 <span class="data-value highlight" id="volatility">0.00%</span>
                             </div>
                             <div class="data-item">
-                                <span class="data-label">数据点数</span>
+                                <span class="data-label">Data Points</span>
                                 <span class="data-value" id="dataPoints">0</span>
                             </div>
                         </div>
 
-                        <div class="data-card">
+                        <!-- <div class="data-card">
                             <div class="data-item">
-                                <span class="data-label">市值估算</span>
-                                <span class="data-value highlight" id="marketCap">0万亿</span>
+                                <span class="data-label">Market Cap</span>
+                                <span class="data-value highlight" id="marketCap">0.00T</span>
                             </div>
                             <div class="data-item">
-                                <span class="data-label">市盈率</span>
+                                <span class="data-label">P/E Ratio</span>
                                 <span class="data-value" id="peRatio">0.00</span>
                             </div>
                             <div class="data-item">
-                                <span class="data-label">目标价格</span>
+                                <span class="data-label">Target Price</span>
                                 <span class="data-value highlight" id="targetPrice">0.00</span>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <script src="/src/js/details.js"></script>
+    <script type="module" src="/src/js/details.js"></script>
 </body>
 
 </html>
