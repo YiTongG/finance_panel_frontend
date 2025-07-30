@@ -1,13 +1,13 @@
 
-// API基础配置
+// API base configuration
 const API = {
     // Base URL - The actual IP address and port where the backend is running
     BASE_URL: 'https://d307a0585538.ngrok-free.app',
 
-    // 通用请求方法
+    // Common request methods
     async get(endpoint, params = {}) {
         try {
-            // 构建URL查询参数
+            // Construct the full URL with query parameters
             const url = new URL(`${this.BASE_URL}${endpoint}`);
             Object.keys(params).forEach(key =>
                 url.searchParams.append(key, params[key])
@@ -16,11 +16,11 @@ const API = {
 
             const response = await fetch(url);
             if (!response.ok) {
-                throw new Error(`HTTP错误: ${response.status}`);
+                throw new Error(`HTTP false: ${response.status}`);
             }
             return await response.json();
         } catch (error) {
-            console.error('API请求失败:', error);
+            console.error('API request failed:', error);
             throw error;
         }
     },
@@ -35,11 +35,11 @@ const API = {
                 body: JSON.stringify(data)
             });
             if (!response.ok) {
-                throw new Error(`HTTP错误: ${response.status}`);
+                throw new Error(`HTTP false: ${response.status}`);
             }
             return await response.json();
         } catch (error) {
-            console.error('API请求失败:', error);
+            console.error('API request failed:', error);
             throw error;
         }
     },
@@ -54,11 +54,11 @@ const API = {
                 body: JSON.stringify(data)
             });
             if (!response.ok) {
-                throw new Error(`HTTP错误: ${response.status}`);
+                throw new Error(`HTTP false: ${response.status}`);
             }
             return await response.json();
         } catch (error) {
-            console.error('API请求失败:', error);
+            console.error('API request failed:', error);
             throw error;
         }
     },
@@ -69,11 +69,11 @@ const API = {
                 method: 'DELETE'
             });
             if (!response.ok) {
-                throw new Error(`HTTP错误: ${response.status}`);
+                throw new Error(`HTTP false: ${response.status}`);
             }
             return await response.json();
         } catch (error) {
-            console.error('API请求失败:', error);
+            console.error('API request failed:', error);
             throw error;
         }
     }
@@ -103,7 +103,6 @@ const StockAPI = {
             throw new Error('Search keyword cannot be empty');
         }
         return API.get('/api/stocks/search', { query: query });
-
     },
 
     // Searches for a single stock's historical data.
@@ -116,10 +115,6 @@ const StockAPI = {
         }
         return API.get('/api/stocks/history',  { symbol: symbol, interval: interval });
     }
-
-
-
-
 };
 
 export { API, IndicesAPI, StockAPI };

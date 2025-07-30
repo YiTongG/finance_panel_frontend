@@ -137,14 +137,14 @@ body {
 .main-container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 30px 20px;
+    padding: 15px 20px;
     position: relative; /* 确保子元素的绝对定位生效 */
 }
 
 /* 新增的返回按钮样式 */
 .back-button {
     position: absolute;
-    top: 36px; /* 沿着搜索框上边缘往左 */
+    top: 20px; /* 沿着搜索框上边缘往左 */
     left: 20px; /* 沿着热门股票左边缘往上 */
     width: 50px;
     height: 50px;
@@ -221,7 +221,7 @@ body {
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 30px;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
 }
 
 /* 热门股票区域 */
@@ -283,18 +283,110 @@ body {
     border-color: #64748B;
     color: #E2E8F0;
 }
+.stock-item {
+    display: grid;
+    /* Define grid columns:
+       1st column for stock-info (symbol and name),
+       2nd for price, 3rd for volume, 4th for amplitude, 5th for change.
+       Adjust widths as needed. */
+    grid-template-columns: 1fr 100px 120px 80px 80px; /* Added a column for volume, assuming the duplicate stock-price is volume */
+    gap: 75px;
+    padding: 10px 20px;
+    background: rgba(51, 65, 85, 0.4);
+    border-radius: 12px;
+    border: 1px solid transparent;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    margin-bottom: 10px;
+    align-items: center; /* Vertically aligns items in the grid row */
+}
 
-.stocks-list {
+.stock-item:hover {
+    background: rgba(51, 65, 85, 0.7);
+    border-color: #475569;
+    transform: translateX(5px);
+}
+
+.stock-info {
+    display: flex; /* Use flexbox for vertical stacking */
+    flex-direction: column; /* Stack children (symbol and name) vertically */
+    justify-content: center; /* Center content vertically within stock-info */
+    align-items: flex-start; /* Align text to the left within stock-info */
+}
+
+.stock-symbol {
+    font-weight: 700;
+    color: #3B82F6;
+    font-size: 1rem;
+    margin-bottom: 4px; /* Add some space between symbol and name */
+}
+
+.stock-name {
+    color: #94A3B8;
+    font-size: 0.85rem;
+}
+
+/* Ensure these elements are aligned horizontally and text is right-aligned */
+.stock-price,
+.stock-volume, /* Assuming this is the element you want to be for volume */
+.stock-amplitude,
+.stock-change {
+    display: flex; /* Use flexbox to align content if needed */
+    align-items: center; /* Vertically center the text within its own div */
+    justify-content: flex-end; /* Right-align the text */
+    text-align: right; /* Fallback for text alignment */
+    font-weight: 600; /* Apply consistent font weight */
+}
+
+.stock-price {
+    color: #F1F5F9;
+}
+
+.stock-volume,
+.stock-amplitude {
+    color: #64748B;
+    font-size: 0.8rem; /* Smaller font size for volume and amplitude */
+}
+
+.stock-change {
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+}
+
+.stock-change.positive {
+    color: #10B981;
+}
+
+.stock-change.negative {
+    color: #EF4444;
+}
+
+/* ... (rest of your CSS code) ... */
+
+/* Media query adjustments for smaller screens */
+@media (max-width: 768px) {
+    .stock-item {
+        /* Adjust grid template for smaller screens if needed */
+        grid-template-columns: 1fr 80px 80px 80px; /* Example: remove amplitude column if space is tight */
+        gap: 10px;
+    }
+    /* If stock-volume should be hidden on small screens, add: */
+    /* .stock-volume {
+        display: none;
+    } */
+}
+/* .stocks-list {
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
 
 .stock-item {
-    display: grid;
+    /* display: grid; */
     grid-template-columns: 1fr 100px 120px 80px;
     gap: 15px;
-    padding: 16px 20px;
+    padding: 10px 20px;
     background: rgba(51, 65, 85, 0.4);
     border-radius: 12px;
     border: 1px solid transparent;
@@ -355,7 +447,11 @@ body {
     font-size: 0.8rem;
     text-align: right;
 }
-
+.stock-amplitude {
+    color: #64748B;
+    font-size: 0.8rem;
+    text-align: right;
+} */
 /* 行业板块矩阵 */
 .sectors-section {
     background: rgba(30, 41, 59, 0.6);
