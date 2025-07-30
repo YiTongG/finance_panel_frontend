@@ -104,6 +104,7 @@ const StockAPI = {
         }
         return API.get('/api/stocks/search', { query: query });
     },
+
     // Searches for a single stock's historical data.
     searchStocksHistory(symbol, interval) {
         if (!symbol || symbol.trim() === '') {
@@ -113,7 +114,8 @@ const StockAPI = {
             throw new Error('Time interval cannot be empty.');
         }
         return API.get('/api/stocks/history',  { symbol: symbol, interval: interval });
-    }  
+    }
+      
 };
 
 export { API, IndicesAPI, StockAPI };
