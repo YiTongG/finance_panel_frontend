@@ -2,7 +2,7 @@
 // API基础配置
 const API = {
     // 基础URL - 后端实际运行的IP地址和端口
-    BASE_URL: 'https://8e121301ff25.ngrok-free.app', 
+    BASE_URL: 'http://127.0.0.1:5000', 
 
     // 通用请求方法
     async get(endpoint, params = {}) {
@@ -12,6 +12,7 @@ const API = {
             Object.keys(params).forEach(key =>
                 url.searchParams.append(key, params[key])
             );
+            url.searchParams.append('_', new Date().getTime());
 
             const response = await fetch(url);
             if (!response.ok) {
@@ -91,31 +92,58 @@ const IndicesAPI = {
         return API.post('/api/global/news');
     }
 }
-// 股票API - 基于stocksRoutes.js和stockController.js
-// const StockAPI = {
-//     // 获取大盘指数
-//     getIndexes() {
-//         return API.get('/api/stocks/indexes');
-//     },
+//股票API - 基于stocksRoutes.js和stockController.js
+const StockAPI = {
+    // 获取大盘指数
+    getIndexes() {
+        return API.get('/api/stocks/indexes');
+    },
 
-//     // 获取热门股票，可选排序方式
-//     getHotStocks(sortBy = '') {
-//         return API.get('/api/stocks/hot', { sortBy });
-//     },
+    // 获取热门股票，可选排序方式
+    getHotStocks(sortBy = '') {
+        return API.get('/api/stocks/hot', { sortBy });
+    },
 
-//     // 获取行业板块
-//     getSectors() {
-//         return API.get('/api/stocks/sectors');
-//     },
+    // 获取行业板块
+    getSectors() {
+        return API.get('/api/stocks/sectors');
+    },
 
-//     // 搜索股票
-//     searchStocks(query) {
-//         if (!query) {
-//             throw new Error('搜索关键词不能为空');
-//         }
-//         return API.get('/api/stocks/search', { q: query });
-//     }
-// };
+    /**
+     * Searches for stocks by name or symbol.
+     * @param {string} query - The search term (e.g., "Tesla", "TSLA").
+     * @returns {Promise<object>} The API response.
+     */
+    searchStocks(query) {
+        if (!query || query.trim() === '') {
+            // FIX 2: Translated error message to English for consistency.
+            throw new Error('Search query cannot be empty.');
+        }
+
+        return API.get('/api/stocks/search', {  query: query });
+    },
+
+    /**
+     * Searches for a single stock's historical data.
+     * @param {string} symbol - The exact stock symbol (e.g., "TSLA").
+     * @param {string} interval - The time interval (e.g., '1d', '1wk', '1mo').
+     * @returns {Promise<object>} The API response.
+     */
+    // FIX 1: Corrected function name typo from "searchStocksHistort" to "searchStocksHistory".
+    searchStocksHistory(symbol, interval) {
+        // FIX 2: Changed function signature to accept 'symbol' and 'interval' for clarity and correctness.
+        if (!symbol || symbol.trim() === '') {
+            throw new Error('Stock symbol cannot be empty.');
+        }
+        if (!interval || interval.trim() === '') {
+            throw new Error('Time interval cannot be empty.');
+        }
+
+        // FIX 3: Corrected the parameters to pass both 'symbol' and 'interval'
+        // as required by your backend API. The original code had an undefined variable 's'.
+        return API.get('/api/stocks/history',  { symbol: symbol, interval: interval });
+    }  
+};
 
 // 交易API - 基于transactionRoutes.js和transactionController.js
 // const TransactionAPI = {
@@ -142,4 +170,4 @@ const IndicesAPI = {
 // };
 
 // 如果想支持模块导出(需要使用构建工具或现代浏览器)
-export { API, IndicesAPI};
+export { API, IndicesAPI,StockAPI};
