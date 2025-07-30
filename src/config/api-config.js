@@ -103,6 +103,7 @@ const StockAPI = {
             throw new Error('Search keyword cannot be empty');
         }
         return API.get('/api/stocks/search', { query: query });
+
     },
 
     // Searches for a single stock's historical data.
@@ -115,7 +116,10 @@ const StockAPI = {
         }
         return API.get('/api/stocks/history',  { symbol: symbol, interval: interval });
     }
-      
+
+
+
+
 };
 
 export { API, IndicesAPI, StockAPI };
