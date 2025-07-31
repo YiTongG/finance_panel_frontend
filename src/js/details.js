@@ -1,9 +1,11 @@
-import {StockAPI } from '/src/config/api-config.js';
+import { StockAPI,TransactionAPI } from '/src/config/api-config.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const symbol = "Tesla"
     const code = "TSLA"
+    const USER_ID = 45430196
+
 
     //const symbol = urlParams.get('symbol');
 
@@ -22,22 +24,38 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     async function fetchCurrentQuote(stockSymbol) {
         try {
-            // FIX: The 'result' variable now directly holds the final JSON object.
-            // There is no need to check response.ok or call response.json() here,
-            // because the StockAPI client already did that for you.
-            const result = await StockAPI.searchStocks(stockSymbol);
-
-            if (result.success && result.data.length > 0) {
-                updateHeaderUI(result.data[0]);
+            const searchResult = await StockAPI.searchStocks(stockSymbol);
+    
+            if (searchResult.success && searchResult.data.length > 0) {
+                const companyInfo = searchResult.data[0];
+                const stockCode = companyInfo.stockCode;
+    
+                // Step 2: Use the symbol to get the latest quote from its price history.
+                const historyResult = await StockAPI.searchStocksHistory(stockCode,'1d');
+    
+                if (historyResult.success && historyResult.data.length > 0) {
+                    const latestQuote = historyResult.data[0]; // The most recent quote
+    
+                    // Combine the company info and the latest price for the UI.
+                    const displayData = {
+                        ...companyInfo, // Contains name, symbol, etc.
+                        ...latestQuote  // Contains close price, date, etc.
+                    };
+    
+                    updateHeaderUI(displayData);
+                } else {
+                    console.warn(`Could not find price history for symbol: ${stockSymbol}`);
+                    // Fallback: update UI with only the company info if history is unavailable.
+                    updateHeaderUI(companyInfo);
+                }
             } else {
-                console.warn(`Could not find current data for symbol: ${stockSymbol}`);
+                console.warn(`Could not find company matching: ${companyName}`);
             }
         } catch (error) {
-            // This will now catch errors thrown from the API client itself.
-            console.error('Failed to fetch current quote:', error);
+            // This catches errors from either API call.
+            console.error('Failed to fetch stock data:', error);
         }
     }
-
     /**
      * Updates the top header section of the page.
      * @param {object} quote - A stock quote object from the /search endpoint.
@@ -66,13 +84,12 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadHistoricalData(period = '1d') {
         try {
             myChart.showLoading();
-            
-            // FIX: Same as above. 'result' is the final JSON data.
+
             const result = await StockAPI.searchStocksHistory(code, period);
 
             if (!result.success || result.data.length === 0) {
                 myChart.hideLoading();
-                myChart.setOption({ title: { text: 'No historical data available.', left: 'center', top: 'center' }}, true);
+                myChart.setOption({ title: { text: 'No historical data available.', left: 'center', top: 'center' } }, true);
                 clearAnalysisTable();
                 return;
             }
@@ -107,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const lowPrice = Math.min(...prices);
         const avgPrice = prices.reduce((a, b) => a + b, 0) / prices.length;
         const volatility = ((highPrice - lowPrice) / avgPrice) * 100;
-        
+
         // --- Update Analysis Table ---
         document.getElementById('startPrice').textContent = startPrice.toFixed(2);
         document.getElementById('chartEndPrice').textContent = endPrice.toFixed(2);
@@ -143,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
         myChart.hideLoading();
         myChart.setOption(chartOption, true); // `true` clears the previous option
     }
-    
+
     /**
      * Clears the analysis table when no data is available.
      */
@@ -167,18 +184,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const period = button.getAttribute('data-period');
             // Map front-end period to your API's expected interval value
             const apiInterval = {
-                '1m':'1m',
-                '2m':'2m',
-                '3m':'3m',
-                '4m':'4m',
-                '5m':'5m',
-                '15m':'15m',
-                '30m':'30m',
-                '1h':'1h',
-                '1d':'1d',
-                '1wk':'1wk',
-                '1m':'1m',
-                '1qty':'1qty',
+                '1m': '1m',
+                '2m': '2m',
+                '3m': '3m',
+                '4m': '4m',
+                '5m': '5m',
+                '15m': '15m',
+                '30m': '30m',
+                '1h': '1h',
+                '1d': '1d',
+                '1wk': '1wk',
+                '1m': '1m',
+                '1qty': '1qty',
             }[period] || '1m';
 
             loadHistoricalData(apiInterval);
@@ -186,15 +203,99 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- Go Back Button ---
-    window.goBack = function() {
+    window.goBack = function () {
         window.history.back();
     }
-    
+    let currentStockPrice = 295.45;
+    const tradeAmountInput = document.getElementById('tradeAmount');
+    let currentUserBalance = 0;
+    let currentHoldings = 0;
+
+
+    // NEW: Function to load user's trading data
+    async function loadTradePanelData() {
+        try {
+            const result = await TransactionAPI.getUserTransactions(USER_ID);
+            if (result.success && result.data.length > 0) {
+                const transactions = result.data;
+                // Balance is the same in all records, take it from the first
+                currentUserBalance = parseFloat(transactions[0].money);
+
+                // Find holdings for the CURRENT stock
+                const stockHolding = transactions.find(t => t.stockCode === symbol);
+                currentHoldings = stockHolding ? stockHolding.holdNumber : 0;
+
+                // Update UI
+                document.getElementById('userBalance').textContent = `$${currentUserBalance.toLocaleString('en-US')}`;
+                document.getElementById('userHoldings').textContent = currentHoldings;
+            } else {
+                // If no transaction data, you might need to fetch user's balance from another endpoint
+                console.warn('No transaction data found for user.');
+            }
+        } catch (error) {
+            console.error("Failed to load user transaction data:", error);
+        }
+        updateTradeButtonsState();
+    }
+
+    // NEW: Function to enable/disable trade buttons
+    function updateTradeButtonsState() {
+        const amount = parseInt(tradeAmountInput.value, 10);
+        if (isNaN(amount) || amount <= 0) {
+            buyButton.disabled = true;
+            sellButton.disabled = true;
+            return;
+        }
+
+        // Can the user afford to buy?
+        buyButton.disabled = (amount * currentStockPrice > currentUserBalance);
+
+        // Does the user have enough shares to sell?
+        sellButton.disabled = (amount > currentHoldings);
+    }
+
+    // NEW: Function to execute a trade
+    async function executeTrade(type) {
+        const amount = parseInt(tradeAmountInput.value, 10);
+        if (isNaN(amount) || amount <= 0) {
+            alert('Please enter a valid amount.');
+            return;
+        }
+
+        const tradeData = {
+            userId: USER_ID,
+            stockCode: symbol,
+            type: type, // 'BUY' or 'SELL'
+            shares: amount,
+            price: currentStockPrice
+        };
+
+        try {
+            const result = await TransactionAPI.createTransaction(tradeData);
+            if (result.success) {
+                alert(`Successfully ${type === 'BUY' ? 'bought' : 'sold'} ${amount} shares of ${symbol}!`);
+                // Refresh the panel to show new balance and holdings
+                await loadTradePanelData();
+                tradeAmountInput.value = ''; // Clear input
+            } else {
+                alert(`Trade failed: ${result.message || 'Unknown error'}`);
+            }
+        } catch (error) {
+            console.error('Trade execution failed:', error);
+            alert('An error occurred while executing the trade.');
+        }
+    }
+
+    // --- Event Listeners ---
+    tradeAmountInput.addEventListener('input', updateTradeButtonsState);
+    buyButton.addEventListener('click', () => executeTrade('BUY'));
+    sellButton.addEventListener('click', () => executeTrade('SELL'));
+
     // --- Initial Page Load ---
     async function initializePage() {
         // First, populate the header with the latest data
         await fetchCurrentQuote(symbol);
-        // Then, load the default historical view for the chart
+        await loadTradePanelData();
         await loadHistoricalData('1m'); // '1m' for the default '1D' view
     }
 

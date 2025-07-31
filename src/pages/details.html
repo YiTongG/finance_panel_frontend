@@ -29,15 +29,38 @@
                             <div class="price-subtitle" id="priceSubtitle">Real-time Price • Eastern Time</div>
                         </div>
                     </div>
+                    <div class="trade-panel">
+                        <div class="trade-info">
+                            <div class="info-item">
+                                <span>Your Balance:</span>
+                                <strong id="userBalance">$0.00</strong>
+                            </div>
+                            <div class="info-item">
+                                <span>Your Shares:</span>
+                                <strong id="userHoldings">0</strong>
+                            </div>
+                        </div>
+                        <div class="trade-actions">
+                            <input type="number" id="tradeAmount" placeholder="Amount" min="1">
+                            <div class="trade-buttons">
+                                <button id="buyButton" class="trade-btn buy">Buy</button>
+                                <button id="sellButton" class="trade-btn sell">Sell</button>
+                            </div>
+                        </div>
+                    </div>
                     <button class="back-button" onclick="goBack()" title="Go Back">
                         ←
                     </button>
+
                 </div>
+
+
             </div>
 
             <div class="chart-controls">
                 <div class="time-range-buttons">
-                    <button class="time-btn active" data-period="1m">1M</button>
+
+                    <button class="time-btn" data-period="1m">1M</button>
                     <button class="time-btn" data-period="2m">2M</button>
                     <button class="time-btn" data-period="3m">3M</button>
                     <button class="time-btn" data-period="4m">4M</button>
@@ -45,7 +68,7 @@
                     <button class="time-btn" data-period="15m">15M</button>
                     <button class="time-btn" data-period="30m">30M</button>
                     <button class="time-btn" data-period="1h">1H</button>
-                    <button class="time-btn" data-period="1d">1D</button>
+                    <button class="time-btn active" data-period="1d">1D</button>
                     <button class="time-btn" data-period="1wk">1WK</button>
                     <button class="time-btn" data-period="1mo">1MO</button>
                     <button class="time-btn" data-period="1qty">1QTY</button>
