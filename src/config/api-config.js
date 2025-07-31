@@ -84,7 +84,7 @@ const IndicesAPI = {
         return API.get('/api/indexes/all');
     },
     // get regionTrend for ab ar chat
-    getRegionTrend(region) {
+    getRegionTrend() {
         return API.get(`/api/indexes/regionTrend`);
     },
     // get news recommendation for scroll
