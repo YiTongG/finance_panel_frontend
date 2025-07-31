@@ -2,55 +2,34 @@ import { StockAPI,TransactionAPI } from '/src/config/api-config.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
-    const symbol = "Tesla"
-    const code = "TSLA"
     const USER_ID = 45430196
-
-
-    //const symbol = urlParams.get('symbol');
-
-    if (!symbol) {
+    const STOCK_CODE = urlParams.get('ticker');
+    if (!STOCK_CODE) {
         document.body.innerHTML = '<h1>Error: Stock symbol not provided in URL.</h1>';
         return;
     }
-
     // Initialize ECharts instance
     const chartDom = document.getElementById('stockChart');
     const myChart = echarts.init(chartDom);
 
     /**
      * Fetches the current quote for the header.
-     * @param {string} stockSymbol - The stock symbol to fetch.
+     * @param {string} code - The stock symbol to fetch. name
      */
-    async function fetchCurrentQuote(stockSymbol) {
+    async function fetchCurrentQuote(stockCode) {
         try {
-            const searchResult = await StockAPI.searchStocks(stockSymbol);
-    
-            if (searchResult.success && searchResult.data.length > 0) {
-                const companyInfo = searchResult.data[0];
-                const stockCode = companyInfo.stockCode;
-    
-                // Step 2: Use the symbol to get the latest quote from its price history.
                 const historyResult = await StockAPI.searchStocksHistory(stockCode,'1d');
-    
                 if (historyResult.success && historyResult.data.length > 0) {
                     const latestQuote = historyResult.data[0]; // The most recent quote
-    
-                    // Combine the company info and the latest price for the UI.
                     const displayData = {
-                        ...companyInfo, // Contains name, symbol, etc.
                         ...latestQuote  // Contains close price, date, etc.
                     };
     
                     updateHeaderUI(displayData);
                 } else {
-                    console.warn(`Could not find price history for symbol: ${stockSymbol}`);
-                    // Fallback: update UI with only the company info if history is unavailable.
-                    updateHeaderUI(companyInfo);
+                    console.warn(`Could not find price history for symbol: ${stockCode}`);
                 }
-            } else {
-                console.warn(`Could not find company matching: ${companyName}`);
-            }
+            
         } catch (error) {
             // This catches errors from either API call.
             console.error('Failed to fetch stock data:', error);
@@ -84,16 +63,13 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadHistoricalData(period = '1d') {
         try {
             myChart.showLoading();
-
-            const result = await StockAPI.searchStocksHistory(code, period);
-
+            const result = await StockAPI.searchStocksHistory(STOCK_CODE, period);
             if (!result.success || result.data.length === 0) {
                 myChart.hideLoading();
                 myChart.setOption({ title: { text: 'No historical data available.', left: 'center', top: 'center' } }, true);
                 clearAnalysisTable();
                 return;
             }
-
             updateChartAndTableUI(result.data);
 
         } catch (error) {
@@ -147,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 { show: true, type: 'slider', top: '90%', start: 0, end: 100 }
             ],
             series: [{
-                name: symbol,
+                name: STOCK_CODE,
                 type: 'candlestick',
                 data: chartData,
                 itemStyle: {
@@ -196,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 '1wk': '1wk',
                 '1m': '1m',
                 '1qty': '1qty',
-            }[period] || '1m';
+            }[period] || '1d';
 
             loadHistoricalData(apiInterval);
         });
@@ -222,7 +198,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 currentUserBalance = parseFloat(transactions[0].money);
 
                 // Find holdings for the CURRENT stock
-                const stockHolding = transactions.find(t => t.stockCode === symbol);
+                const stockHolding = transactions.find(t => t.stockCode === STOCK_CODE);
                 currentHoldings = stockHolding ? stockHolding.holdNumber : 0;
 
                 // Update UI
@@ -264,7 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const tradeData = {
             userId: USER_ID,
-            stockCode: symbol,
+            stockCode: STOCK_CODE,
             type: type, // 'BUY' or 'SELL'
             shares: amount,
             price: currentStockPrice
@@ -273,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const result = await TransactionAPI.createTransaction(tradeData);
             if (result.success) {
-                alert(`Successfully ${type === 'BUY' ? 'bought' : 'sold'} ${amount} shares of ${symbol}!`);
+                alert(`Successfully ${type === 'BUY' ? 'bought' : 'sold'} ${amount} shares of ${STOCK_CODE}!`);
                 // Refresh the panel to show new balance and holdings
                 await loadTradePanelData();
                 tradeAmountInput.value = ''; // Clear input
@@ -294,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Initial Page Load ---
     async function initializePage() {
         // First, populate the header with the latest data
-        await fetchCurrentQuote(symbol);
+        await fetchCurrentQuote(STOCK_CODE);
         await loadTradePanelData();
         await loadHistoricalData('1m'); // '1m' for the default '1D' view
     }

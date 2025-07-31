@@ -25,6 +25,21 @@ function renderStocksList(stocks) {
             
         </div>
     `).join('');
+    // Attach click listeners to each newly rendered stock item for navigation
+    stocksList.querySelectorAll('.stock-item').forEach(item => {
+        item.addEventListener('click', function (event) {
+            // Apply ripple effect on click
+            addRippleEffect(event);
+
+            const stockTicker = this.querySelector('.stock-symbol').textContent;
+            if (stockTicker) {
+                // A brief delay allows the ripple animation to be visible before navigation
+                setTimeout(() => {
+                    window.location.href = `details.html?ticker=${stockTicker}`;
+                }, 150);
+            }
+        });
+    });
 }
 
 // Fetch and render hot stocks
@@ -95,32 +110,39 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function performSearch() {
         const query = searchInput.value.trim();
-        console.log('Search query:', query);
-
         if (!query) {
-            alert('Search query cannot be empty. Please enter a stock name.');
-            searchInput.value = ''; // Clear the search input
-            return; // Exit the function
+            alert('Search query cannot be empty. Please enter a stock name or ticker.');
+            return;
         }
+    
         try {
             const response = await StockAPI.searchStocks(query);
-            console.log('API response:', response);
-            if (response && response.success === true && response.count === 0 && response.data && response.data.length === 0) {
-                alert('The entered stock name is incorrect or no results were found. Please try again.');
-                searchInput.value = ''; // Clear the search input
-                return; // Exit the function
+            
+            // Check if the search returned any results
+            if (response && response.data && response.data.length > 0) {
+                const stock = response.data[0];
+                
+                // **FIX:** Check that the stock object and its ticker property both exist
+                if (stock && stock.stockCode) {
+                    window.location.href = `details.html?ticker=${stock.stockCode}`;
+                } else {
+                    // Handle cases where the API result is malformed
+                    console.error("API Error: Search result is missing a ticker.", stock);
+                    alert("An error occurred with the search result. Please try again.");
+                }
+            } else {
+                // Redirect with the query if no results are found
+                window.location.href = `details.html`;
             }
-            console.log('Stock data:', response.data);
         } catch (error) {
             console.error('Error during stock search:', error);
             alert('An error occurred while searching for stocks. Please try again later.');
         }
     }
-
     // Attach the event listener to the search button
     searchButton.addEventListener('click', performSearch);
 
-    // Optional: Allow searching on Enter key press
+    // Allow searching on Enter key press
     searchInput.addEventListener('keypress', function (event) {
         if (event.key === 'Enter') {
             performSearch();
