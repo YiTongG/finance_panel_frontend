@@ -253,108 +253,26 @@ body {
     filter: brightness(1.2) contrast(1.1);
 }
 
-/* 右侧面板容器，用于趋势分析和风险监控 */
+/* 右侧面板容器，用于新闻展示 */
 .right-panel {
     grid-column: 3;
-    /* Occupies the third column */
     grid-row: 1;
-    /* Occupies the top content row */
     display: grid;
-    /* Nested grid for its children */
     grid-template-rows: 1fr 1fr;
-    /* Trend Analysis and Risk Monitoring share height equally */
     overflow: hidden;
-    /* 防止内部滚动条 */
-}
-.news-list {
-    height: calc(100% - 60px); /* Adjust based on section-title height and padding */
-    overflow-y: auto; /* Enable vertical scrolling */
-    padding: 10px 15px; /* Padding inside the scrollable area */
-    box-sizing: border-box; /* Include padding in height calculation */
-    scrollbar-width: thin; /* For Firefox */
-    scrollbar-color: #888 #555; /* For Firefox */
 }
 
-/* Webkit scrollbar (Chrome, Safari) */
-.news-list::-webkit-scrollbar {
-    width: 6px;
-}
-
-.news-list::-webkit-scrollbar-track {
-    background: #555;
-    border-radius: 3px;
-}
-
-.news-list::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 3px;
-}
-
-.news-item {
-    background-color: #3a3f62; /* Background for each news item */
-    padding: 12px;
-    margin-bottom: 10px; /* Space between news items */
-    border-radius: 8px;
-    transition: background-color 0.2s ease-in-out;
-}
-
-.news-item:hover {
-    background-color: #4a507a; /* Slightly lighter on hover */
-    cursor: pointer;
-}
-
-.news-title {
-    color: #e0e0e0; /* Light gray for titles */
-    font-size: 15px;
-    font-weight: 500;
-    line-height: 1.4;
-    margin-bottom: 5px;
-    display: -webkit-box;
-    -webkit-line-clamp: 3; /* Limit to 3 lines */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.news-link {
-    color: #88aaff; /* A blueish color for links */
-    font-size: 13px;
-    text-decoration: none; /* No underline */
-    display: block; /* Ensures link takes full width */
-}
-
-.news-link:hover {
-    text-decoration: underline;
-}
-
-/* Basic styling for the news section itself, if not already present */
-.news {
-    background-color: #2a2e48; /* Darker background for the whole section */
-    border-radius: 12px;
-    padding: 15px; /* Overall padding for the news component */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    display: flex;
-    flex-direction: column; /* To stack title and news list */
-}
-
-.news .section-title {
-    margin-bottom: 15px; /* Space between title and news list */
-}
-/* 趋势分析 (Dark Card Style) */
+/* 趋势分析 (Dark Card Style) - 新闻部分的整体样式 */
 .news {
     background: rgba(30, 41, 59, 0.6);
-    /* Consistent dark background */
     backdrop-filter: blur(10px);
-    /* Consistent blur */
     border-radius: 16px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     border: 1px solid #334155;
-    /* Consistent dark border */
     padding: 16px;
     color: #f1f5f9;
-    /* Light text */
     position: relative;
-    overflow: hidden;
+    overflow: hidden; /* 防止内部滚动条 */
     display: flex;
     flex-direction: column;
 }
@@ -366,10 +284,95 @@ body {
     left: 0;
     right: 0;
     height: 3px;
-    /* Changed to accent blue gradient */
     background: linear-gradient(90deg, #3B82F6, #667eea);
 }
 
+/* 新闻列表容器 */
+.news-list {
+    height: calc(100% - 60px); /* 假设 section-title 高度为 60px */
+    overflow: hidden; /* **重要：隐藏超出部分，实现滚动效果** */
+    padding: 10px 15px;
+    box-sizing: border-box;
+    position: relative; /* 为内部滚动内容提供定位上下文 */
+}
+
+/* 新增：包裹所有新闻项的容器，用于动画 */
+.news-list .news-scroll-content {
+    display: flex;
+    flex-direction: column; /* 让新闻项垂直排列 */
+    /* 使用 CSS 变量控制动画时长 */
+    animation: scroll-up var(--scroll-duration, 20s) linear infinite;
+}
+
+/* 鼠标悬停时暂停动画 (已存在，再次确认) */
+.news-list:hover .news-scroll-content {
+    animation-play-state: paused;
+}
+
+/* 新闻项的样式 */
+.news-item {
+    background-color: #3a3f62; /* 背景颜色 */
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease-in-out; /* 平滑过渡效果 */
+    flex-shrink: 0; /* 防止新闻项在 flex 容器中缩小 */
+    display: flex; /* **新增：使用 flexbox 布局来对齐小标记和标题** */
+    align-items: flex-start; /* **新增：顶部对齐，如果标记或标题有多行** */
+}
+
+/* 鼠标悬停时新闻项高亮 */
+.news-item:hover {
+    background-color: #4a507a; /* 稍亮一点的背景色 */
+    cursor: pointer; /* 鼠标指针变为手型 */
+}
+
+/* 新增：新闻前的小标记 */
+.news-item .news-marker {
+    color: #667eea; /* 标记的颜色，与主题色搭配 */
+    font-size: 1.2em; /* 标记的大小 */
+    line-height: 1; /* 确保标记与标题行高一致 */
+    margin-right: 8px; /* 标记和标题之间的间距 */
+    flex-shrink: 0; /* 防止标记缩小 */
+    /* 可以是任何字符，例如 • (项目符号) 或 ► (小箭头) 或 ★ (星星) */
+    /* 也可以使用伪元素来实现更复杂的图标，但这里用一个简单的 div 来演示 */
+}
+
+.news-title {
+    color: #e0e0e0;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.4;
+    margin-bottom: 5px; /* 这里可以移除，因为 news-item 已经有底部 margin */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* 新增：允许标题占据剩余空间 */
+    flex-grow: 1;
+}
+
+.news-link {
+    color: #88aaff;
+    font-size: 13px;
+    text-decoration: none;
+    display: block; /* 确保链接占据完整宽度 */
+}
+
+.news-link:hover {
+    text-decoration: underline;
+}
+
+/* 定义滚动动画 */
+@keyframes scroll-up {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(var(--scroll-distance, 0px));
+    }
+}
 /* 行业趋势 (Dark Card Style) */
 .industry-trends {
     background: rgba(30, 41, 59, 0.6);
