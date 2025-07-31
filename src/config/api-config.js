@@ -2,7 +2,7 @@
 // API base configuration
 const API = {
     // Base URL - The actual IP address and port where the backend is running
-    BASE_URL: 'https://d307a0585538.ngrok-free.app',
+    BASE_URL: 'https://38a2b84f1292.ngrok-free.app',
 
     // Common request methods
     async get(endpoint, params = {}) {
