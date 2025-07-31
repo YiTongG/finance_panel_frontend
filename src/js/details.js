@@ -70,10 +70,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 clearAnalysisTable();
                 return;
             }
-            updateChartAndTableUI(result.data);
+            updateChartAndTableUI(result.data,period);
 
         } catch (error) {
             console.error('Failed to load historical data:', error);
+            myChart.hideLoading();
         }
     }
 
@@ -81,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
      * Updates the ECharts instance and the bottom analysis table.
      * @param {Array} historicalData - An array of historical data points.
      */
-    function updateChartAndTableUI(historicalData) {
+    function updateChartAndTableUI(historicalData,period) {
         // --- Process Data for Chart and Analysis ---
         const chartData = historicalData.map(item => [
             new Date(item.timestamp).getTime(),
@@ -272,7 +273,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // First, populate the header with the latest data
         await fetchCurrentQuote(STOCK_CODE);
         await loadTradePanelData();
-        await loadHistoricalData('1m'); // '1m' for the default '1D' view
+        await loadHistoricalData('1d'); // '1m' for the default '1D' view
     }
 
     initializePage();
