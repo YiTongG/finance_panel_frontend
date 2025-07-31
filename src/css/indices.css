@@ -272,7 +272,8 @@ body {
     padding: 16px;
     color: #f1f5f9;
     position: relative;
-    overflow: hidden; /* 防止内部滚动条 */
+    overflow: hidden;
+    /* 防止内部滚动条 */
     display: flex;
     flex-direction: column;
 }
@@ -289,17 +290,21 @@ body {
 
 /* 新闻列表容器 */
 .news-list {
-    height: calc(100% - 60px); /* 假设 section-title 高度为 60px */
-    overflow: hidden; /* **重要：隐藏超出部分，实现滚动效果** */
+    height: calc(100% - 60px);
+    /* 假设 section-title 高度为 60px */
+    overflow: hidden;
+    /* **重要：隐藏超出部分，实现滚动效果** */
     padding: 10px 15px;
     box-sizing: border-box;
-    position: relative; /* 为内部滚动内容提供定位上下文 */
+    position: relative;
+    /* 为内部滚动内容提供定位上下文 */
 }
 
 /* 新增：包裹所有新闻项的容器，用于动画 */
 .news-list .news-scroll-content {
     display: flex;
-    flex-direction: column; /* 让新闻项垂直排列 */
+    flex-direction: column;
+    /* 让新闻项垂直排列 */
     /* 使用 CSS 变量控制动画时长 */
     animation: scroll-up var(--scroll-duration, 20s) linear infinite;
 }
@@ -311,29 +316,41 @@ body {
 
 /* 新闻项的样式 */
 .news-item {
-    background-color: #3a3f62; /* 背景颜色 */
+    background-color: #3a3f62;
+    /* 背景颜色 */
     padding: 12px;
     margin-bottom: 10px;
     border-radius: 8px;
-    transition: background-color 0.2s ease-in-out; /* 平滑过渡效果 */
-    flex-shrink: 0; /* 防止新闻项在 flex 容器中缩小 */
-    display: flex; /* **新增：使用 flexbox 布局来对齐小标记和标题** */
-    align-items: flex-start; /* **新增：顶部对齐，如果标记或标题有多行** */
+    transition: background-color 0.2s ease-in-out;
+    /* 平滑过渡效果 */
+    flex-shrink: 0;
+    /* 防止新闻项在 flex 容器中缩小 */
+    display: flex;
+    /* **新增：使用 flexbox 布局来对齐小标记和标题** */
+    align-items: flex-start;
+    /* **新增：顶部对齐，如果标记或标题有多行** */
 }
 
 /* 鼠标悬停时新闻项高亮 */
 .news-item:hover {
-    background-color: #4a507a; /* 稍亮一点的背景色 */
-    cursor: pointer; /* 鼠标指针变为手型 */
+    background-color: #4a507a;
+    /* 稍亮一点的背景色 */
+    cursor: pointer;
+    /* 鼠标指针变为手型 */
 }
 
 /* 新增：新闻前的小标记 */
 .news-item .news-marker {
-    color: #667eea; /* 标记的颜色，与主题色搭配 */
-    font-size: 1.2em; /* 标记的大小 */
-    line-height: 1; /* 确保标记与标题行高一致 */
-    margin-right: 8px; /* 标记和标题之间的间距 */
-    flex-shrink: 0; /* 防止标记缩小 */
+    color: #667eea;
+    /* 标记的颜色，与主题色搭配 */
+    font-size: 1.2em;
+    /* 标记的大小 */
+    line-height: 1;
+    /* 确保标记与标题行高一致 */
+    margin-right: 8px;
+    /* 标记和标题之间的间距 */
+    flex-shrink: 0;
+    /* 防止标记缩小 */
     /* 可以是任何字符，例如 • (项目符号) 或 ► (小箭头) 或 ★ (星星) */
     /* 也可以使用伪元素来实现更复杂的图标，但这里用一个简单的 div 来演示 */
 }
@@ -343,7 +360,8 @@ body {
     font-size: 15px;
     font-weight: 500;
     line-height: 1.4;
-    margin-bottom: 5px; /* 这里可以移除，因为 news-item 已经有底部 margin */
+    margin-bottom: 5px;
+    /* 这里可以移除，因为 news-item 已经有底部 margin */
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
@@ -357,7 +375,8 @@ body {
     color: #88aaff;
     font-size: 13px;
     text-decoration: none;
-    display: block; /* 确保链接占据完整宽度 */
+    display: block;
+    /* 确保链接占据完整宽度 */
 }
 
 .news-link:hover {
@@ -369,10 +388,12 @@ body {
     0% {
         transform: translateY(0);
     }
+
     100% {
         transform: translateY(var(--scroll-distance, 0px));
     }
 }
+
 /* 行业趋势 (Dark Card Style) */
 .industry-trends {
     background: rgba(30, 41, 59, 0.6);
@@ -411,6 +432,7 @@ body {
     align-items: center;
     gap: 8px;
     flex-shrink: 0;
+    color: white;
 }
 
 .section-icon {
@@ -726,6 +748,19 @@ body {
     .map-area {
         grid-column: 1;
         grid-row: 4;
+    }
+
+    .point {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background-color: red;
+        border-radius: 50%;
+        cursor: pointer;
+        top: 50px;
+        transform: translate(-50%, -50%);
+        /* 从图片顶部向下 50 像素 */
+        left: 100px; /* 从图片左侧向右 100 像素 */
     }
 
     .market-performance,
