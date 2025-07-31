@@ -1,8 +1,9 @@
-
+const userId = 45430196; // Example user ID, replace with actual user ID logic
 // API base configuration
 const API = {
     // Base URL - The actual IP address and port where the backend is running
-    BASE_URL: 'https://38a2b84f1292.ngrok-free.app',
+    BASE_URL: 'https://fa1e843534ff.ngrok-free.app'
+,
 
     // Common request methods
     async get(endpoint, params = {}) {
@@ -103,6 +104,11 @@ const StockAPI = {
             throw new Error('Search keyword cannot be empty');
         }
         return API.get('/api/stocks/search', { query: query });
+    },
+
+    // get user assets
+    getUserAssets(UserId){
+        return API.get(`/api/transactions/user/${UserId}`);
     },
 
     // Searches for a single stock's historical data.
