@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const result = await TransactionAPI.createTransaction(tradeData);
-            if (result.success) {
+            if (result.code==200 && result.body=="交易成功" ) {
                 alert(`Successfully ${type === 'BUY' ? 'bought' : 'sold'} ${amount} shares of ${STOCK_CODE}!`);
                 // Refresh the panel to show new balance and holdings
                 await loadTradePanelData();
