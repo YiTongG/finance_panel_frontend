@@ -121,6 +121,20 @@ const StockAPI = {
         }
         return API.get('/api/stocks/history',  { symbol: symbol, interval: interval });
     }
+ 
+};
+const TransactionAPI = {
+    // UPDATED: Changed to get transactions for a specific user
+    getUserTransactions(userId) {
+        return API.get(`/api/transactions/user/${userId}`);
+    },
+
+    // NEW: Added a function to create a new transaction (buy/sell)
+    // This assumes your backend has a POST endpoint to handle trades
+    createTransaction(transactionData) {
+        // transactionData should include: { userId, stockCode, type: 'BUY'|'SELL', shares, price }
+        return API.post('/api/transactions/execute', transactionData);
+    },
 };
 
-export { API, IndicesAPI, StockAPI };
+export { API, IndicesAPI, StockAPI, TransactionAPI};
