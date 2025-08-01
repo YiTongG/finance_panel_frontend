@@ -102,8 +102,8 @@ function renderAssetsList(assetsData) {
 // Fetch and render user assets
 async function fetchAndRenderUserAssets() {
     try {
-        const UserId = 45430196; // Example user ID, replace with actual user ID logic
-        const response = await StockAPI.getUserAssets(UserId); // Renamed to 'response' for clarity
+        const userId = 45430196; // Example user ID, replace with actual user ID logic
+        const response = await StockAPI.getUserAssets(userId); // Renamed to 'response' for clarity
 
         if (response && response.success && Array.isArray(response.data)) {
             console.log('User assets:', response.data);
