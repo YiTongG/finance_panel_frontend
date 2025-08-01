@@ -2,7 +2,7 @@ const userId = 45430196; // Example user ID, replace with actual user ID logic
 // API base configuration
 const API = {
     // Base URL - The actual IP address and port where the backend is running
-    BASE_URL: 'https://fa1e843534ff.ngrok-free.app'
+    BASE_URL: 'https://b3869a481d97.ngrok-free.app'
 ,
 
     // Common request methods
