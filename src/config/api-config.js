@@ -1,8 +1,9 @@
-
+const userId = 45430196; // Example user ID, replace with actual user ID logic
 // API base configuration
 const API = {
     // Base URL - The actual IP address and port where the backend is running
-    BASE_URL: 'http://127.0.0.1:5000',
+    BASE_URL: 'https://b3869a481d97.ngrok-free.app'
+,
 
     // Common request methods
     async get(endpoint, params = {}) {
@@ -105,6 +106,11 @@ const StockAPI = {
         return API.get('/api/stocks/search', { query: query });
     },
 
+    // get user assets
+    getUserAssets(UserId){
+        return API.get(`/api/transactions/user/${UserId}`);
+    },
+
     // Searches for a single stock's historical data.
     searchStocksHistory(symbol, interval) {
         if (!symbol || symbol.trim() === '') {
@@ -117,20 +123,4 @@ const StockAPI = {
     }
 };
 
-const TransactionAPI = {
-    // UPDATED: Changed to get transactions for a specific user
-    getUserTransactions(userId) {
-        return API.get(`/api/transactions/user/${userId}`);
-    },
-
-    // NEW: Added a function to create a new transaction (buy/sell)
-    // This assumes your backend has a POST endpoint to handle trades
-    createTransaction(transactionData) {
-        // transactionData should include: { userId, stockCode, type: 'BUY'|'SELL', shares, price }
-        return API.post('/api/transactions/execute', transactionData);
-    },
-
-    // ... (other transaction methods if you have them) ...
-};
-
-export { API, IndicesAPI, StockAPI, TransactionAPI};
+export { API, IndicesAPI, StockAPI };
